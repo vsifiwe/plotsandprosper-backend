@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "common",
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_spectacular",
 ]
 
 MIDDLEWARE = [
@@ -62,6 +63,21 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# Swagger UI: JWT Bearer only (no Basic/session auth)
+SWAGGER_SETTINGS = {
+    "USE_SESSION_AUTH": False,
+    "SECURITY_DEFINITIONS": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT Bearer token. Enter: Bearer &lt;your_access_token&gt;",
+        }
+    },
+    "SECURITY_REQUIREMENTS": [{"Bearer": []}],
 }
 
 ROOT_URLCONF = "api.urls"

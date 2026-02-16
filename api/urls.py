@@ -32,16 +32,7 @@ SchemaView = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
-    permission_classes=(permissions.AllowAny,),
-    security_definitions={
-        "Bearer": {
-            "type": "apiKey",
-            "in": "header",
-            "name": "Authorization",
-            "description": "JWT Bearer token. Example: \"Bearer <your_access_token>\"",
-        }
-    },
-    security=[{"Bearer": []}],
+    permission_classes=(permissions.AllowAny,)
 )
 
 urlpatterns = [
