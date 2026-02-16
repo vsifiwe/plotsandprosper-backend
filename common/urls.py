@@ -4,8 +4,13 @@ common/urls.py
 
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from common.views import MemberList, CustomTokenObtainPairView
-from common.views import ContributionWindowList
+from common.views import (
+    MemberList,
+    CustomTokenObtainPairView,
+    ContributionWindowList,
+    ContributionList,
+)
+
 
 urlpatterns = [
     path("auth/login/", CustomTokenObtainPairView.as_view(), name="login"),
@@ -16,4 +21,5 @@ urlpatterns = [
         ContributionWindowList.as_view(),
         name="contribution_window_list",
     ),
+    path("contributions/", ContributionList.as_view(), name="contribution_list"),
 ]
