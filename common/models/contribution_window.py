@@ -13,11 +13,11 @@ class ContributionWindow(models.Model):
 
     start_at = models.DateTimeField()
     end_at = models.DateTimeField()
-    min_amount = models.DecimalField(max_digits=20, decimal_places=4, default=0)
+    min_amount = models.DecimalField(max_digits=20, decimal_places=4)
     max_amount = models.DecimalField(
         max_digits=20, decimal_places=4, null=True, blank=True
     )
-    name = models.CharField(max_length=64, blank=True)
+    name = models.CharField(max_length=64)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -33,4 +33,4 @@ class ContributionWindow(models.Model):
         """
         String representation of the contribution window
         """
-        return self.name or f"{self.start_at.date()} – {self.end_at.date()}"
+        return f"{self.name}"
