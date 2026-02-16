@@ -15,9 +15,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         user = self.user
         name = ""
         role = None
+        email = ""
         if hasattr(user, "member") and user.member:
             member = user.member
             name = f"{member.firstName} {member.lastName}".strip()
             role = member.role
-        data["user"] = {"name": name, "role": role}
+            email = member.email
+        data["user"] = {"name": name, "role": role, "email": email}
         return data
