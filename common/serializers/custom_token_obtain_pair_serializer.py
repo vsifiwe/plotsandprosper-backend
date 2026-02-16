@@ -1,5 +1,5 @@
 """
-common/serializers.py
+common/serializers/custom_token_obtain_pair_serializer.py
 """
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
