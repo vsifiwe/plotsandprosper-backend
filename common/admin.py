@@ -3,7 +3,7 @@ common/admin.py
 """
 
 from django.contrib import admin
-from common.models import Member, ContributionWindow, Contribution
+from common.models import Member, ContributionWindow, Contribution, InvestmentVehicle
 
 
 @admin.register(Member)
@@ -48,4 +48,16 @@ class ContributionAdmin(admin.ModelAdmin):
     list_display = ["member", "window", "amount", "recorded_at"]
     list_filter = ["member", "window", "recorded_at"]
     search_fields = ["member__firstName", "member__lastName", "window__name"]
+    list_per_page = 10
+
+
+@admin.register(InvestmentVehicle)
+class InvestmentVehicleAdmin(admin.ModelAdmin):
+    """
+    Investment vehicle admin
+    """
+
+    list_display = ["name", "vehicle_type", "description"]
+    list_filter = ["vehicle_type"]
+    search_fields = ["name"]
     list_per_page = 10

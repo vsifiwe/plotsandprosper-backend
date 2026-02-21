@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from common.models import ContributionWindow
 from common.serializers import ContributionWindowSerializer
+from common.pagination import StandardResultsSetPagination
 
 
 class ContributionWindowList(APIView):
@@ -19,8 +20,10 @@ class ContributionWindowList(APIView):
         Get all contribution windows
         """
         contribution_windows = ContributionWindow.objects.all()
-        serializer = ContributionWindowSerializer(contribution_windows, many=True)
-        return Response(serializer.data)
+        paginator = StandardResultsSetPagination()
+        page = paginator.paginate_queryset(contribution_windows, request, view=self)
+        serializer = ContributionWindowSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         """

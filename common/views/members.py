@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from common.models import Member
 from common.serializers import MemberSerializer
+from common.pagination import StandardResultsSetPagination
 
 
 class MemberList(APIView):
@@ -18,9 +19,11 @@ class MemberList(APIView):
         """
         Get all members
         """
-        members = Member.objects.all()
-        serializer = MemberSerializer(members, many=True)
-        return Response(serializer.data)
+        members = Member.objects.all().order_by("-createdAt")
+        paginator = StandardResultsSetPagination()
+        page = paginator.paginate_queryset(members, request, view=self)
+        serializer = MemberSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         """

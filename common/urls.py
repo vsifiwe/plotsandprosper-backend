@@ -9,6 +9,7 @@ from common.views import (
     CustomTokenObtainPairView,
     ContributionWindowList,
     ContributionList,
+    InvestmentVehicleList,
 )
 
 
@@ -22,4 +23,9 @@ urlpatterns = [
         name="contribution_window_list",
     ),
     path("contributions/", ContributionList.as_view(), name="contribution_list"),
+    path(
+        "investments/",
+        InvestmentVehicleList.as_view(),
+        name="investment_list",
+    ),
 ]
