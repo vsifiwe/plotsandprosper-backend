@@ -7,6 +7,7 @@ from .auth import CustomTokenObtainPairView
 from .contribution_windows import ContributionWindowList
 from .contribution import ContributionList
 from .investment_vehicles import InvestmentVehicleList
+from .analytics import GroupAnalyticsView
 
 __all__ = [
     "MemberList",
@@ -14,4 +15,5 @@ __all__ = [
     "ContributionWindowList",
     "ContributionList",
     "InvestmentVehicleList",
+    "GroupAnalyticsView",
 ]

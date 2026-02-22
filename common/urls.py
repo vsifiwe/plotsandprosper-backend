@@ -10,6 +10,7 @@ from common.views import (
     ContributionWindowList,
     ContributionList,
     InvestmentVehicleList,
+    GroupAnalyticsView,
 )
 
 
@@ -28,4 +29,5 @@ urlpatterns = [
         InvestmentVehicleList.as_view(),
         name="investment_list",
     ),
+    path("analytics/", GroupAnalyticsView.as_view(), name="group_analytics"),
 ]
