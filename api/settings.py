@@ -17,6 +17,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
+def env_bool(name: str, default: bool) -> bool:
+    """
+    Read boolean environment variables in a predictable way.
+    """
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.lower() in {"1", "true", "yes", "on"}
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,12 +35,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-#twil551l*#xp46gy*r^^0sjl6l4dhyvw2a%_n)odcjv$rs)b0"
+SECRET_KEY = os.getenv(
+    "DJANGO_SECRET_KEY",
+    "django-insecure-#twil551l*#xp46gy*r^^0sjl6l4dhyvw2a%_n)odcjv$rs)b0",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env_bool("DJANGO_DEBUG", True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv(
+        "DJANGO_ALLOWED_HOSTS",
+        "localhost,127.0.0.1,[::1]",
+    ).split(",")
+    if host.strip()
+]
 
 
 # Application definition

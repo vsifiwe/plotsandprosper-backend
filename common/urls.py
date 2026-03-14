@@ -25,9 +25,9 @@ urlpatterns = [
     ),
     path("contributions/", ContributionList.as_view(), name="contribution_list"),
     path(
-        "investments/",
+        "investment-accounts/",
         InvestmentVehicleList.as_view(),
-        name="investment_list",
+        name="investment_account_list",
     ),
     path("analytics/", GroupAnalyticsView.as_view(), name="group_analytics"),
 ]
