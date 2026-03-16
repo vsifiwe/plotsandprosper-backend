@@ -55,6 +55,8 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
+# AUTH_USER_MODEL = "accounts.User"
+
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -62,15 +64,29 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "drf_yasg",
-    "common",
+    # Third-party
+    "corsheaders",
+    "django_celery_results",
     "rest_framework",
     "rest_framework_simplejwt",
+    "rest_framework_simplejwt.token_blacklist",
     "drf_spectacular",
+    # Project apps
+    "common",
+    "accounts",
+    "contributions",
+    "investments",
+    "withdrawals",
+    "assets",
+    "statements",
+    "audit",
+    "calculations",
+    "tasks",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -85,25 +101,55 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 25,
 }
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(hours=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ACCESS_TOKEN_LIFETIME": timedelta(
+        minutes=int(os.getenv("JWT_ACCESS_TOKEN_LIFETIME_MINUTES", "15"))
+    ),
+    "REFRESH_TOKEN_LIFETIME": timedelta(
+        days=int(os.getenv("JWT_REFRESH_TOKEN_LIFETIME_DAYS", "7"))
+    ),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-SWAGGER_SETTINGS = {
-    "USE_SESSION_AUTH": False,
-    "SECURITY_DEFINITIONS": {
-        "Bearer": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header",
-            "description": "JWT Bearer token. Enter: Bearer &lt;your_access_token&gt;",
-        }
-    },
-    "SECURITY_REQUIREMENTS": [{"Bearer": []}],
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Plots & Prosper API",
+    "DESCRIPTION": "Savings group investment lifecycle management platform.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    "COMPONENT_SPLIT_REQUEST": True,
 }
+
+# CORS
+CORS_ALLOWED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    if origin.strip()
+]
+
+# Celery
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_CACHE_BACKEND = "default"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_SERIALIZER = "json"
+CELERY_TIMEZONE = "UTC"
+
+# S3 / Document storage
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY", "")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "plots-prosper-docs")
+AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL", "")  # MinIO for local dev
+AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "us-east-1")
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
 
 ROOT_URLCONF = "api.urls"
 

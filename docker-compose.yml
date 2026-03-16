@@ -1,4 +1,22 @@
 services:
+  # db:
+  #   image: postgres:16-alpine
+  #   restart: unless-stopped
+  #   environment:
+  #     POSTGRES_DB: ${DB_NAME:-plots_prosper}
+  #     POSTGRES_USER: ${DB_USER:-plots_prosper}
+  #     POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+  #   ports:
+  #     - "5432:5432"
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
   web:
     build:
       context: .
@@ -13,3 +31,11 @@ services:
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-change-this-in-production}
       DJANGO_DEBUG: ${DJANGO_DEBUG:-true}
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,[::1]}
+      # DB_HOST: db
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      # - db
+      - redis
+
+# volumes:
+#   postgres_data:
