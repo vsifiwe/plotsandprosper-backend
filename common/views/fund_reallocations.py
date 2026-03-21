@@ -58,7 +58,7 @@ class FundReallocationList(APIView):
             destination.current_value = new_destination_value
             destination.save(update_fields=["current_value", "updated_at"])
 
-            reallocation = serializer.save()
+            reallocation = serializer.save(requested_by=request.user.member)
 
         # Re-serialize with updated vehicle details
         output = FundReallocationSerializer(reallocation).data

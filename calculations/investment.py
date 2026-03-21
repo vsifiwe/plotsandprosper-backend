@@ -27,33 +27,30 @@ def compute_contribution_allocation(unallocated_value, contribution_amount):
     return unallocated_value + contribution_amount
 
 
-def compute_investment_balances(
-    unallocated_value, vehicle_value, amount, shares, share_price
-):
+def compute_investment_balances(unallocated_value, vehicle_value, shares, share_price):
     """
     Compute new balances after investing from the unallocated pool into a vehicle.
+    Amount is derived from shares * share_price.
 
     Args:
         unallocated_value: Current unallocated pool balance (Decimal).
         vehicle_value: Current value of the target vehicle (Decimal).
-        amount: Amount to invest (Decimal, must be > 0).
         shares: Number of shares purchased (Decimal, must be > 0).
         share_price: Price per share (Decimal, must be > 0).
 
     Returns:
-        Tuple of (new_unallocated_value, new_vehicle_value).
+        Tuple of (amount, new_unallocated_value, new_vehicle_value).
 
     Raises:
         ValueError: If any validation fails.
     """
-    if amount <= Decimal("0"):
-        raise ValueError("Investment amount must be greater than zero.")
-
     if shares <= Decimal("0"):
         raise ValueError("Shares must be greater than zero.")
 
     if share_price <= Decimal("0"):
         raise ValueError("Share price must be greater than zero.")
+
+    amount = shares * share_price
 
     if amount > unallocated_value:
         raise ValueError(
@@ -61,13 +58,6 @@ def compute_investment_balances(
             f"Available: {unallocated_value}, requested: {amount}."
         )
 
-    expected_amount = shares * share_price
-    if expected_amount != amount:
-        raise ValueError(
-            f"Amount mismatch: shares ({shares}) * share_price ({share_price}) "
-            f"= {expected_amount}, but amount is {amount}."
-        )
-
     new_unallocated = unallocated_value - amount
     new_vehicle = vehicle_value + amount
-    return new_unallocated, new_vehicle
+    return amount, new_unallocated, new_vehicle

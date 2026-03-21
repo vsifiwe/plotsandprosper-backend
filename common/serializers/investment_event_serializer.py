@@ -29,12 +29,7 @@ class InvestmentEventSerializer(serializers.ModelSerializer):
             "created_at",
             "investment_vehicle_details",
         )
-        read_only_fields = ("id", "created_at")
-
-    def validate_amount(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("Amount must be greater than zero.")
-        return value
+        read_only_fields = ("id", "created_at", "recorded_by", "amount")
 
     def validate_shares(self, value):
         if value <= 0:
@@ -52,12 +47,7 @@ class InvestmentEventSerializer(serializers.ModelSerializer):
                 {"investment_vehicle": "Cannot invest into the unallocated funds pool."}
             )
 
-        expected = attrs["shares"] * attrs["share_price"]
-        if expected != attrs["amount"]:
-            raise serializers.ValidationError(
-                {"amount": f"Amount must equal shares * share_price ({expected})."}
-            )
-
+        attrs["amount"] = attrs["shares"] * attrs["share_price"]
         return attrs
 
     def to_representation(self, instance):

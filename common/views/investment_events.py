@@ -51,14 +51,12 @@ class InvestmentEventList(APIView):
                 pk=serializer.validated_data["investment_vehicle"].pk
             )
 
-            amount = serializer.validated_data["amount"]
             shares = serializer.validated_data["shares"]
             share_price = serializer.validated_data["share_price"]
 
-            new_unallocated, new_vehicle = compute_investment_balances(
+            _amount, new_unallocated, new_vehicle = compute_investment_balances(
                 unallocated.current_value,
                 vehicle.current_value,
-                amount,
                 shares,
                 share_price,
             )
@@ -69,7 +67,7 @@ class InvestmentEventList(APIView):
             vehicle.current_value = new_vehicle
             vehicle.save(update_fields=["current_value", "updated_at"])
 
-            event = serializer.save()
+            event = serializer.save(recorded_by=request.user.member)
 
         output = InvestmentEventSerializer(event).data
         return Response(output, status=status.HTTP_201_CREATED)

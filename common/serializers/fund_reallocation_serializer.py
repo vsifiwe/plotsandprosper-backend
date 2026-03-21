@@ -33,7 +33,7 @@ class FundReallocationSerializer(serializers.ModelSerializer):
             "source_vehicle_details",
             "destination_vehicle_details",
         )
-        read_only_fields = ("id", "created_at", "status")
+        read_only_fields = ("id", "created_at", "status", "requested_by")
 
     def validate_amount(self, value):
         if value <= 0:
