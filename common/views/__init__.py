@@ -8,6 +8,8 @@ from .contribution_windows import ContributionWindowList
 from .contribution import ContributionList
 from .investment_vehicles import InvestmentVehicleList
 from .analytics import GroupAnalyticsView
+from .fund_reallocations import FundReallocationList
+from .investment_events import InvestmentEventList
 
 __all__ = [
     "MemberList",
@@ -16,4 +18,6 @@ __all__ = [
     "ContributionList",
     "InvestmentVehicleList",
     "GroupAnalyticsView",
+    "FundReallocationList",
+    "InvestmentEventList",
 ]

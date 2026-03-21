@@ -11,6 +11,8 @@ from common.views import (
     ContributionList,
     InvestmentVehicleList,
     GroupAnalyticsView,
+    FundReallocationList,
+    InvestmentEventList,
 )
 
 
@@ -28,6 +30,16 @@ urlpatterns = [
         "investment-accounts/",
         InvestmentVehicleList.as_view(),
         name="investment_account_list",
+    ),
+    path(
+        "fund-reallocations/",
+        FundReallocationList.as_view(),
+        name="fund_reallocation_list",
+    ),
+    path(
+        "investment-events/",
+        InvestmentEventList.as_view(),
+        name="investment_event_list",
     ),
     path("analytics/", GroupAnalyticsView.as_view(), name="group_analytics"),
 ]

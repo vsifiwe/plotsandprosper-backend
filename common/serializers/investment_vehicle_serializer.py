@@ -18,3 +18,10 @@ class InvestmentVehicleSerializer(serializers.ModelSerializer):
 
         model = InvestmentVehicle
         fields = "__all__"
+
+    def validate_vehicle_type(self, value):
+        if value == "UNALLOCATED":
+            raise serializers.ValidationError(
+                "Cannot manually create an unallocated funds vehicle."
+            )
+        return value

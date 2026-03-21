@@ -7,6 +7,8 @@ from .member_serializer import MemberSerializer
 from .contribution_window_serializer import ContributionWindowSerializer
 from .contribution_serializer import ContributionSerializer
 from .investment_vehicle_serializer import InvestmentVehicleSerializer
+from .fund_reallocation_serializer import FundReallocationSerializer
+from .investment_event_serializer import InvestmentEventSerializer
 
 __all__ = [
     "CustomTokenObtainPairSerializer",
@@ -14,4 +16,6 @@ __all__ = [
     "ContributionWindowSerializer",
     "ContributionSerializer",
     "InvestmentVehicleSerializer",
+    "FundReallocationSerializer",
+    "InvestmentEventSerializer",
 ]

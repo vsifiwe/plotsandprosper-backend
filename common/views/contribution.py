@@ -2,11 +2,13 @@
 common/views/contribution.py
 """
 
+from django.db import transaction
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from common.models import Contribution
 
+from calculations.investment import compute_contribution_allocation
+from common.models import Contribution, InvestmentVehicle, InvestmentVehicleType
 from common.serializers import ContributionSerializer
 from common.pagination import StandardResultsSetPagination
 
@@ -28,10 +30,26 @@ class ContributionList(APIView):
 
     def post(self, request):
         """
-        Create a new contribution
+        Create a new contribution and credit the unallocated funds pool.
         """
         serializer = ContributionSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        with transaction.atomic():
+            unallocated = InvestmentVehicle.objects.select_for_update().get(
+                vehicle_type=InvestmentVehicleType.UNALLOCATED
+            )
+            amount = serializer.validated_data["amount"]
+
+            new_balance = compute_contribution_allocation(
+                unallocated.current_value, amount
+            )
+
+            unallocated.current_value = new_balance
+            unallocated.save(update_fields=["current_value", "updated_at"])
+
+            contribution = serializer.save()
+
+        output = ContributionSerializer(contribution).data
+        return Response(output, status=status.HTTP_201_CREATED)
