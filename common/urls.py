@@ -2,7 +2,7 @@
 common/urls.py
 """
 
-from django.urls import path
+from django.urls import include, path
 from rest_framework_simplejwt.views import TokenRefreshView
 from common.views import (
     MemberList,
@@ -42,4 +42,5 @@ urlpatterns = [
         name="investment_event_list",
     ),
     path("analytics/", GroupAnalyticsView.as_view(), name="group_analytics"),
+    path("members/me/statement/", include("statements.urls")),
 ]
