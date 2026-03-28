@@ -13,6 +13,8 @@ from common.views import (
     GroupAnalyticsView,
     FundReallocationList,
     InvestmentEventList,
+    MemberGoalView,
+    AdminGoalListView,
 )
 
 
@@ -42,5 +44,7 @@ urlpatterns = [
         name="investment_event_list",
     ),
     path("analytics/", GroupAnalyticsView.as_view(), name="group_analytics"),
+    path("members/me/goal/", MemberGoalView.as_view(), name="member_goal"),
+    path("admin/goals/", AdminGoalListView.as_view(), name="admin_goal_list"),
     path("members/me/statement/", include("statements.urls")),
 ]

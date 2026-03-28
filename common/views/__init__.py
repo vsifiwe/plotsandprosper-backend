@@ -10,6 +10,7 @@ from .investment_vehicles import InvestmentVehicleList
 from .analytics import GroupAnalyticsView
 from .fund_reallocations import FundReallocationList
 from .investment_events import InvestmentEventList
+from .goals import MemberGoalView, AdminGoalListView
 
 __all__ = [
     "MemberList",
@@ -20,4 +21,6 @@ __all__ = [
     "GroupAnalyticsView",
     "FundReallocationList",
     "InvestmentEventList",
+    "MemberGoalView",
+    "AdminGoalListView",
 ]

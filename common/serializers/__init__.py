@@ -9,6 +9,7 @@ from .contribution_serializer import ContributionSerializer
 from .investment_vehicle_serializer import InvestmentVehicleSerializer
 from .fund_reallocation_serializer import FundReallocationSerializer
 from .investment_event_serializer import InvestmentEventSerializer
+from .goal_serializer import GoalSerializer, GoalDetailSerializer, AdminGoalListSerializer
 
 __all__ = [
     "CustomTokenObtainPairSerializer",
@@ -18,4 +19,7 @@ __all__ = [
     "InvestmentVehicleSerializer",
     "FundReallocationSerializer",
     "InvestmentEventSerializer",
+    "GoalSerializer",
+    "GoalDetailSerializer",
+    "AdminGoalListSerializer",
 ]

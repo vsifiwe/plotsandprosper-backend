@@ -3,7 +3,7 @@ common/admin.py
 """
 
 from django.contrib import admin
-from common.models import Member, ContributionWindow, Contribution, InvestmentVehicle
+from common.models import Member, ContributionWindow, Contribution, InvestmentVehicle, Goal
 
 
 @admin.register(Member)
@@ -60,4 +60,16 @@ class InvestmentVehicleAdmin(admin.ModelAdmin):
     list_display = ["name", "vehicle_type", "description"]
     list_filter = ["vehicle_type"]
     search_fields = ["name"]
+    list_per_page = 10
+
+
+@admin.register(Goal)
+class GoalAdmin(admin.ModelAdmin):
+    """
+    Goal admin.
+    """
+
+    list_display = ["member", "timeline", "target_amount", "updated_at"]
+    list_filter = ["timeline", "created_at", "updated_at"]
+    search_fields = ["member__firstName", "member__lastName", "member__email"]
     list_per_page = 10
